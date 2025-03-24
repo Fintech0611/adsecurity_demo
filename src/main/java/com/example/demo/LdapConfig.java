@@ -34,7 +34,6 @@ public class LdapConfig {
         contextSource.setUserDn(ldapUserDn);
         contextSource.setPassword(ldapPassword);
         Hashtable<String, Object> environment = new Hashtable<>();
-        environment.put(Context.REFERRAL, "follow"); // or "ignore"
         contextSource.setBaseEnvironmentProperties(environment);
 
         return contextSource;
@@ -42,6 +41,8 @@ public class LdapConfig {
 
     @Bean
     public LdapTemplate ldapTemplate() {
-        return new LdapTemplate(contextSource());
+        LdapTemplate ldapTemplate = new LdapTemplate(contextSource());
+        ldapTemplate.setIgnorePartialResultException(true);
+        return ldapTemplate;
     }
 }

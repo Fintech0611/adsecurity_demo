@@ -22,8 +22,6 @@ public class LdapService {
     @Autowired
     private LdapTemplate ldapTemplate;
 
-    private final String GROUP_SEARCH_BASE = "dc=jerry,dc=com";
-
     /**
      * すべてのセキュリティグループを取得する
      * 
