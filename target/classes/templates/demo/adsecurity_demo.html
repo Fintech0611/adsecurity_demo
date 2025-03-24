@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title th:text="${title}">ADセキュリティデモ</title>
+    <style>
+        .bordered-table {
+            border-collapse: collapse;
+            /* 合并边框 */
+        }
+
+        .bordered-table,
+        .bordered-table th,
+        .bordered-table td {
+            border: 1px solid black;
+            /* 添加边框 */
+        }
+    </style>
+</head>
+
+<body style="font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;font-size: 12px;">
+    <form th:action="@{/ldap/portal}" method="post">
+        <div>
+            <div style="display:block;float:left;width: 500;">
+                <div style="justify-content: center;">
+                    <span>セキュリティグループ一覧</span>
+                    <button type="submit" id="action" name="action" value="search">検索</button>
+                </div>
+                <table class="bordered-table">
+                    <colgroup>
+                        <col style="width:50px;" />
+                        <col style="width:300px;" />
+                        <col style="width:150px;" />
+                    </colgroup>
+                    <tbody>
+                        <tr>
+                            <th>選択</th>
+                            <th>グループ名</th>
+                            <th>操作</th>
+                        </tr>
+                        <tr th:each="group : ${groups}">
+                            <td style="text-align: center;">
+                                <input type="checkbox" id="chkGrp" name="chkGrp" />
+                            </td>
+                            <td>
+                                <span><a href="#" th:text="${group.groupName}"></a></span>
+                            </td>
+                            <td style="text-align: center;">
+                                <button type="submit" id="action" name="action" value="delete">削除</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div style="display:block;float:left;width: 500;">
+
+            </div>
+        </div>
+    </form>
+</body>
