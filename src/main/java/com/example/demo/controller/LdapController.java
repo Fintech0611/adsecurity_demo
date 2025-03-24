@@ -24,9 +24,14 @@ public class LdapController {
     }
 
     @RequestMapping(path = "/portal", method = RequestMethod.POST)
-    public String search(@RequestParam(value = "action", required = false) String action, Model model) {
+    public String search(@RequestParam(value = "action", required = false) String action,
+            @RequestParam(value = "newGroupName", required = false) String newGroupName,
+            @RequestParam(value = "newDescription", required = false) String newDescription, Model model) {
         if (action.equals("search")) {
             model.addAttribute("groups", ldapService.search());
+        } else if (action.equals("addGroup")) {
+            ldapService.createGroup(newGroupName, newDescription);
+            // model.addAttribute("groups", ldapService.search());
         }
         return "demo/adsecurity_demo";
     }

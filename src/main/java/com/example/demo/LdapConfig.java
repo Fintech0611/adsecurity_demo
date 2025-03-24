@@ -26,6 +26,9 @@ public class LdapConfig {
     @Value("${spring.ldap.password}")
     private String ldapPassword;
 
+    @Value("${spring.ldap.referral}")
+    private Boolean ldapReferral;
+
     @Bean
     public LdapContextSource contextSource() {
         LdapContextSource contextSource = new LdapContextSource();
@@ -42,7 +45,7 @@ public class LdapConfig {
     @Bean
     public LdapTemplate ldapTemplate() {
         LdapTemplate ldapTemplate = new LdapTemplate(contextSource());
-        ldapTemplate.setIgnorePartialResultException(true);
+        ldapTemplate.setIgnorePartialResultException(ldapReferral);
         return ldapTemplate;
     }
 }
