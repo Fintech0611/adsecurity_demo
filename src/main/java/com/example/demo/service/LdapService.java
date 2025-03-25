@@ -122,12 +122,35 @@ public class LdapService {
     }
 
     /**
+     * グループメンバーを追加する
+     * 
+     * @param groupName グループ名
+     */
+    public void addGroupMember(String groupName) {
+        String groupDn = "cn=" + groupName + ",cn=Users";
+        try {
+            BasicAttribute member = new BasicAttribute("member");
+            member.add("cn=Administrator,cn=Users,dc=jerry,dc=com");
+            ldapTemplate.modifyAttributes(
+                    groupDn,
+                    new ModificationItem[] {
+                            new ModificationItem(
+                                    DirContext.ADD_ATTRIBUTE,
+                                    member)
+                    });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * グループメンバーを削除する
      * 
-     * @param groupDn
+     * @param groupName グループ名
      * @return
      */
-    private boolean removeGroupMembers(String groupDn) {
+    public void removeGroupMembers(String groupName) {
+        String groupDn = "cn=" + groupName + ",cn=Users";
         try {
             ldapTemplate.modifyAttributes(
                     groupDn,
@@ -136,10 +159,8 @@ public class LdapService {
                                     DirContext.REMOVE_ATTRIBUTE,
                                     new BasicAttribute("member"))
                     });
-            return true;
         } catch (Exception e) {
             e.printStackTrace();
-            return false;
         }
     }
 }

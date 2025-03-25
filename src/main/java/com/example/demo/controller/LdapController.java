@@ -34,6 +34,10 @@ public class LdapController {
             // model.addAttribute("groups", ldapService.search());
         } else if (action.startsWith("delete")) {
             ldapService.deleteGroup(action.replace("delete", ""));
+        } else if (action.startsWith("addMember")) {
+            ldapService.addGroupMember(action.replace("addMember", ""));
+        } else if (action.startsWith("removeMember")) {
+            ldapService.removeGroupMembers(action.replace("removeMember", ""));
         }
         return "demo/adsecurity_demo";
     }
