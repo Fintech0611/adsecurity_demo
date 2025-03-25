@@ -6,7 +6,7 @@ import lombok.Data;
 @Builder
 @Data
 public class LdapUser {
-    private String CN;
+    private String cn;
     private String userPrincipalName;
     private String givenName;
     private String sn;

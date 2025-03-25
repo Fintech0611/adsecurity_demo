@@ -30,13 +30,17 @@
                 <table class="bordered-table">
                     <colgroup>
                         <col style="width:50px;" />
-                        <col style="width:300px;" />
                         <col style="width:150px;" />
+                        <col style="width:150px;" />
+                        <col style="width:100px;" />
+                        <col style="width:100px;" />
                     </colgroup>
                     <tbody>
                         <tr>
                             <th>選択</th>
                             <th>グループ名</th>
+                            <th>説明</th>
+                            <th>メンバー</th>
                             <th>操作</th>
                         </tr>
                         <tr th:each="group : ${groups}">
@@ -46,15 +50,21 @@
                             <td>
                                 <span><a href="#" th:text="${group.groupName}"></a></span>
                             </td>
+                            <td>
+                                <span th:text="${group.description}"></span>
+                            </td>
+                            <td>
+                                <p th:each="member : ${group.members}" th:text="${member.cn}"></p>
+                            </td>
                             <td style="text-align: center;">
-                                <button type="submit" id="action" name="action" value="delete">削除</button>
+                                <button type="submit" id="action" name="action" th:value="delete+${group.groupName}">削除</button>
                             </td>
                         </tr>
                         <tr>
+                            <td></td>
                             <td>
                                 <input type="text" id="newGroupName" name="newGroupName" />
                             </td>
-                            
                             <td>
                                 <input type="text" id="newDescription" name="newDescription" />
                             </td>

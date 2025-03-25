@@ -3,10 +3,14 @@ package com.example.demo.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.naming.NamingEnumeration;
 import javax.naming.directory.Attribute;
 import javax.naming.directory.Attributes;
 import javax.naming.directory.BasicAttribute;
 import javax.naming.directory.BasicAttributes;
+import javax.naming.directory.DirContext;
+import javax.naming.directory.ModificationItem;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ldap.core.AttributesMapper;
 import org.springframework.ldap.core.LdapTemplate;
@@ -29,7 +33,7 @@ public class LdapService {
      * @return セキュリティグループリスト
      */
     public List<LdapGroup> search() {
-        List<LdapGroup> groups = new ArrayList<LdapGroup>();
+        List<LdapGroup> groups = new ArrayList<>();
 
         try {
             groups = ldapTemplate.search(
@@ -38,8 +42,24 @@ public class LdapService {
                     (AttributesMapper<LdapGroup>) attrs -> {
                         Attribute sAMAccountName = attrs.get("sAMAccountName");
                         System.out.println("gourpName=" + (String) sAMAccountName.get());
+                        String description = attrs.get("description") == null ? ""
+                                : (String) attrs.get("description").get();
+                        System.out.println("description=" + description);
 
-                        return LdapGroup.builder().groupName((String) sAMAccountName.get()).build();
+                        Attribute member = attrs.get("member");
+
+                        List<LdapUser> members = new ArrayList<>();
+                        if (member != null) {
+                            NamingEnumeration<?> memberEnum = member.getAll();
+                            while (memberEnum.hasMore()) {
+                                members.add(LdapUser.builder().cn((String) memberEnum.next()).build());
+                            }
+                        }
+                        return LdapGroup.builder()
+                                .groupName((String) sAMAccountName.get())
+                                .description(description)
+                                .members(members)
+                                .build();
                     });
         } catch (Exception e) {
             e.printStackTrace();
@@ -50,20 +70,10 @@ public class LdapService {
     }
 
     /**
-     * セキュリティグループのメンバーを取得する
-     * 
-     * @param groupName グループ名
-     * @return メンバーリスト
-     */
-    public List<LdapUser> getMembersOfGroup(String groupName) {
-        return null;
-    }
-
-    /**
      * セキュリティグループを作成する
      * 
-     * @param groupName
-     * @param description
+     * @param groupName   グループ名
+     * @param description 説明
      */
     public void createGroup(String groupName, String description) {
         try {
@@ -85,8 +95,51 @@ public class LdapService {
             ldapTemplate.bind("cn=" + groupName + ",cn=Users", null, groupAttributes);
             System.out.println("グループ【" + groupName + "】を作成しました");
         } catch (Exception e) {
-            System.err.println("グループ失敗" + e.getMessage());
+            System.err.println("グループ作成失敗" + e.getMessage());
             e.printStackTrace();
+        }
+    }
+
+    /**
+     * セキュリティグループのメンバーを削除する
+     * 
+     * @param groupName グループ名
+     * @return メンバーリスト
+     */
+    public void deleteGroup(String groupName) {
+        try {
+            String groupDn = "cn=" + groupName + ",cn=Users";
+            // グループメンバーを削除
+            removeGroupMembers(groupDn);
+
+            // グループ削除
+            ldapTemplate.unbind(groupDn);
+            System.out.println("グループを削除しました。" + groupName);
+        } catch (Exception e) {
+            System.err.println("グループ削除失敗" + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * グループメンバーを削除する
+     * 
+     * @param groupDn
+     * @return
+     */
+    private boolean removeGroupMembers(String groupDn) {
+        try {
+            ldapTemplate.modifyAttributes(
+                    groupDn,
+                    new ModificationItem[] {
+                            new ModificationItem(
+                                    DirContext.REMOVE_ATTRIBUTE,
+                                    new BasicAttribute("member"))
+                    });
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
     }
 }
