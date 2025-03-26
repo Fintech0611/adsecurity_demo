@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title th:text="${title}">windows フォルダのセキュリティ詳細設定デモ</title>
+    <style>
+        .bordered-table {
+            border-collapse: collapse;
+            /* 合并边框 */
+        }
+
+        .bordered-table,
+        .bordered-table th,
+        .bordered-table td {
+            border: 1px solid black;
+            /* 添加边框 */
+        }
+    </style>
+</head>
+
+<body style="font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;font-size: 12px;">
+    <form th:action="@{/dacl/portal}" method="post">
+        <div>
+            <div style="display:block;float:left;width: 500;">
+                <div style="justify-content: center;">
+                    <span>高度なアクセス許可一覧</span>
+                    <button type="submit" id="action" name="action" value="search">検索</button>
+                </div>
+                <table class="bordered-table">
+                    <colgroup>
+                        <col style="width:250px;" />
+                        <col style="width:250px;" />
+                    </colgroup>
+                    <tbody>
+                        <tr>
+                            <td style="text-align: left;padding-left: 20px;">
+                                <label>
+                                    <input type="checkbox" id="chkGrp" name="chkGrp" value="0x1" />
+                                    フォルダの一覧/データの読み取り
+                                </label><br />
+                                <label>
+                                    <input type="checkbox" id="chkGrp" name="chkGrp" value="0x80" />
+                                    属性の読み取り
+                                </label>
+                            </td>
+                            <td style="text-align: left;padding-left: 20px;">
+                                <label>
+                                    <input type="checkbox" id="chkGrp" name="chkGrp" value="0x20000" />
+                                    アクセス許可の読み取り
+                                </label><br />
+                                <label>
+                                    <input type="checkbox" id="chkGrp" name="chkGrp" value="0x40000" />
+                                    アクセス許可の変更
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="text" id="userAccount" name="userAccount" th:value="${userAccount}"/>
+                            </td>
+                            <td style="text-align: center;">
+                                <button type="submit" id="action" name="action" value="add">権限付与</button>
+                                <button type="submit" id="action" name="action" value="delete">権限削除</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div style="display:block;float:left;width: 500;">
+
+            </div>
+        </div>
+    </form>
+</body>

@@ -20,7 +20,7 @@ public class LdapController {
     @RequestMapping(path = "", method = RequestMethod.GET)
     public String index(Model model) {
         model.addAttribute("groups", null);
-        return "demo/adsecurity_demo";
+        return "demo/adsecurity";
     }
 
     @RequestMapping(path = "/portal", method = RequestMethod.POST)
@@ -39,7 +39,7 @@ public class LdapController {
         } else if (action.startsWith("removeMember")) {
             ldapService.removeGroupMembers(action.replace("removeMember", ""));
         }
-        return "demo/adsecurity_demo";
+        return "demo/adsecurity";
     }
 
 }
