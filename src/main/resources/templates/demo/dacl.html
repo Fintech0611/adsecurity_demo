@@ -32,21 +32,21 @@
                         <tr>
                             <td style="text-align: left;padding-left: 20px;">
                                 <label>
-                                    <input type="checkbox" id="chkGrp" name="chkGrp" th:value="${aclCheck.checkValue1}" th:field="*{aclCheck.check1}" />
+                                    <input type="checkbox" id="chkGrp" name="chkGrp" value="0x1" th:checked="${check1}" />
                                     フォルダの一覧/データの読み取り
                                 </label><br />
                                 <label>
-                                    <input type="checkbox" id="chkGrp" name="chkGrp" th:value="${aclCheck.checkValue2}" th:field="*{aclCheck.check2}" />
+                                    <input type="checkbox" id="chkGrp" name="chkGrp" value="0x80" th:checked="${check2}" />
                                     属性の読み取り
                                 </label>
                             </td>
                             <td style="text-align: left;padding-left: 20px;">
                                 <label>
-                                    <input type="checkbox" id="chkGrp" name="chkGrp" th:value="${aclCheck.checkValue3}" th:field="*{aclCheck.check3}" />
+                                    <input type="checkbox" id="chkGrp" name="chkGrp" value="0x20000" th:checked="${check3}" />
                                     アクセス許可の読み取り
                                 </label><br />
                                 <label>
-                                    <input type="checkbox" id="chkGrp" name="chkGrp" th:value="${aclCheck.checkValue4}" th:field="*{aclCheck.check4}" />
+                                    <input type="checkbox" id="chkGrp" name="chkGrp" value="0x40000" th:checked="${check4}" />
                                     アクセス許可の変更
                                 </label>
                             </td>
