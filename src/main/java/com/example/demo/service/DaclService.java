@@ -22,8 +22,8 @@ public class DaclService {
         try {
             // 构建 smbcacls 命令
             String command = String.format(
-                    "smbcacls %s \"%s\" -U %s%%%s | grep \"ACL:%s:\"",
-                    sharePath, folder, user, password, userAccount);
+                    "smbcacls %s \"%s\" -U %s%%%s | grep \"ACL:\"",
+                    sharePath, folder, user, password);
 
             System.out.println("command : " + command);
             // 直接用 Runtime 执行命令
@@ -32,33 +32,35 @@ public class DaclService {
             // 读取命令输出
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String line;
-            if ((line = reader.readLine()) != null) {
+            while ((line = reader.readLine()) != null) {
 
-                System.out.println(line);
+                if (line.contains(userAccount)) {
+                    System.out.println(line);
 
-                int startIndex = line.lastIndexOf("/");
-                String accesMask = line.substring(startIndex - 1);
-                acl = Long.valueOf(accesMask).longValue() - acl;
+                    int startIndex = line.lastIndexOf("/");
+                    String accesMask = line.substring(startIndex - 1);
+                    acl = Long.valueOf(accesMask).longValue() - acl;
 
-                if ((aclCheck.checkValue1.equals(acl & aclCheck.checkValue1))) {
-                    aclCheck.check1 = true;
-                } else {
-                    aclCheck.check1 = false;
-                }
-                if ((aclCheck.checkValue2.equals(acl & aclCheck.checkValue2))) {
-                    aclCheck.check2 = true;
-                } else {
-                    aclCheck.check2 = false;
-                }
-                if ((aclCheck.checkValue3.equals(acl & aclCheck.checkValue3))) {
-                    aclCheck.check3 = true;
-                } else {
-                    aclCheck.check3 = false;
-                }
-                if ((aclCheck.checkValue4.equals(acl & aclCheck.checkValue4))) {
-                    aclCheck.check4 = true;
-                } else {
-                    aclCheck.check4 = false;
+                    if ((aclCheck.checkValue1.equals(acl & aclCheck.checkValue1))) {
+                        aclCheck.check1 = true;
+                    } else {
+                        aclCheck.check1 = false;
+                    }
+                    if ((aclCheck.checkValue2.equals(acl & aclCheck.checkValue2))) {
+                        aclCheck.check2 = true;
+                    } else {
+                        aclCheck.check2 = false;
+                    }
+                    if ((aclCheck.checkValue3.equals(acl & aclCheck.checkValue3))) {
+                        aclCheck.check3 = true;
+                    } else {
+                        aclCheck.check3 = false;
+                    }
+                    if ((aclCheck.checkValue4.equals(acl & aclCheck.checkValue4))) {
+                        aclCheck.check4 = true;
+                    } else {
+                        aclCheck.check4 = false;
+                    }
                 }
             }
 
