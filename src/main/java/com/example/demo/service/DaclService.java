@@ -20,13 +20,13 @@ public class DaclService {
             acl |= accessMask;
         }
 
-        String hexAcl = Long.toHexString(acl);
+        String hexAcl = "0x00"+Long.toHexString(acl);
 
         StringBuilder output = new StringBuilder();
         try {
             // 构建 smbcacls 命令
             String command = String.format(
-                    "smbcacls %s \"%s\" -U %s%%%s %s ACL:%s:ALLOWED/OC|OI/%s",
+                    "smbcacls %s \"%s\" -U %s%%%s %s \"ACL:%s:ALLOWED/OI|CI/%s\"",
                     sharePath, folder, user, password, "-a", userAccount, hexAcl);
 
             System.out.println("command : " + command);
@@ -56,14 +56,14 @@ public class DaclService {
             acl |= accessMask;
         }
 
-        String hexAcl = Long.toHexString(acl);
+        String hexAcl = "0x00"+Long.toHexString(acl);
 
         StringBuilder output = new StringBuilder();
         try {
             // 构建 smbcacls 命令
             String command = String.format(
-                    "smbcacls %s \"%s\" -U %s%%%s %s ACL:%s:ALLOWED/OC|OI/%s",
-                    sharePath, folder, user, password, "-d", userAccount, hexAcl);
+                    "smbcacls %s \"%s\" -U %s%%%s %s \"ACL:%s:ALLOWED/OI|CI/%s\"",
+                    sharePath, folder, user, password, "-D", userAccount, hexAcl);
 
             System.out.println("command : " + command);
             // 直接用 Runtime 执行命令
@@ -79,7 +79,7 @@ public class DaclService {
             // 等待进程完成
             int exitCode = process.waitFor();
             if (exitCode != 0) {
-                System.out.println("権限付与失敗 errorCode: " + exitCode);
+                System.out.println("権限削除失敗 errorCode: " + exitCode);
             }
         } catch (Exception e) {
             e.printStackTrace();
