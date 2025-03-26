@@ -23,10 +23,6 @@
     <form th:action="@{/dacl/portal}" method="post">
         <div>
             <div style="display:block;float:left;width: 500;">
-                <div style="justify-content: center;">
-                    <span>高度なアクセス許可一覧</span>
-                    <button type="submit" id="action" name="action" value="search">検索</button>
-                </div>
                 <table class="bordered-table">
                     <colgroup>
                         <col style="width:250px;" />
@@ -36,21 +32,21 @@
                         <tr>
                             <td style="text-align: left;padding-left: 20px;">
                                 <label>
-                                    <input type="checkbox" id="chkGrp" name="chkGrp" value="0x1" />
+                                    <input type="checkbox" id="chkGrp" name="chkGrp" th:value="${aclCheck.checkValue1}" th:field="*{aclCheck.check1}" />
                                     フォルダの一覧/データの読み取り
                                 </label><br />
                                 <label>
-                                    <input type="checkbox" id="chkGrp" name="chkGrp" value="0x80" />
+                                    <input type="checkbox" id="chkGrp" name="chkGrp" th:value="${aclCheck.checkValue2}" th:field="*{aclCheck.check2}" />
                                     属性の読み取り
                                 </label>
                             </td>
                             <td style="text-align: left;padding-left: 20px;">
                                 <label>
-                                    <input type="checkbox" id="chkGrp" name="chkGrp" value="0x20000" />
+                                    <input type="checkbox" id="chkGrp" name="chkGrp" th:value="${aclCheck.checkValue3}" th:field="*{aclCheck.check3}" />
                                     アクセス許可の読み取り
                                 </label><br />
                                 <label>
-                                    <input type="checkbox" id="chkGrp" name="chkGrp" value="0x40000" />
+                                    <input type="checkbox" id="chkGrp" name="chkGrp" th:value="${aclCheck.checkValue4}" th:field="*{aclCheck.check4}" />
                                     アクセス許可の変更
                                 </label>
                             </td>
@@ -60,6 +56,7 @@
                                 <input type="text" id="userAccount" name="userAccount" th:value="${userAccount}"/>
                             </td>
                             <td style="text-align: center;">
+                                <button type="submit" id="action" name="action" value="query">権限取得</button>
                                 <button type="submit" id="action" name="action" value="add">権限付与</button>
                                 <button type="submit" id="action" name="action" value="delete">権限削除</button>
                             </td>
