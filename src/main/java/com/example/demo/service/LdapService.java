@@ -1,6 +1,8 @@
 package com.example.demo.service;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 import javax.naming.NamingEnumeration;
@@ -75,21 +77,31 @@ public class LdapService {
      * @param groupName   グループ名
      * @param description 説明
      */
-    public void createGroup(String groupName, String description) {
+    public void createGroup(String groupName, String description, Boolean isGroup, String password) {
         try {
             // 设置组属性
             Attributes groupAttributes = new BasicAttributes();
             BasicAttribute objectClass = new BasicAttribute("objectClass");
             objectClass.add("top");
-            objectClass.add("group"); // Windows AD 使用 "group"
-            BasicAttribute member = new BasicAttribute("member");
-            member.add("cn=Administrator,cn=Users,dc=jerry,dc=com");
-            groupAttributes.put(member);
+            if (isGroup) {
+                objectClass.add("group"); // Windows AD 使用 "group"
+                BasicAttribute member = new BasicAttribute("member");
+                member.add("cn=Administrator,cn=Users,dc=jerry,dc=com");
+                groupAttributes.put(member);
+                groupAttributes.put("description", description);
+            } else {
+                objectClass.add("person");
+                objectClass.add("organizationalPerson");
+                objectClass.add("user");
+                groupAttributes.put("userPrincipalName", groupName + "@jerry.com");
+                groupAttributes.put("userPassword", password);
+                // groupAttributes.put("unicodePwd ", encodePassword(password));
+                // groupAttributes.put("userAccountControl", String.valueOf(512));
+            }
 
             groupAttributes.put(objectClass);
             groupAttributes.put("cn", groupName);
             groupAttributes.put("sAMAccountName", groupName);
-            groupAttributes.put("description", description);
 
             // 创建组
             ldapTemplate.bind("cn=" + groupName + ",cn=Users", null, groupAttributes);
@@ -161,6 +173,17 @@ public class LdapService {
                     });
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    // パスワードエンコード関数
+    private String encodePassword(String password) {
+        String quotedPassword = "\"" + password + "\"";
+        try {
+            byte[] unicodePwd = quotedPassword.getBytes("UTF-16LE");
+            return Base64.getEncoder().encodeToString(unicodePwd);
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException("パスワードのエンコードエラー", e);
         }
     }
 }

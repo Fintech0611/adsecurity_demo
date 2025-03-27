@@ -26,11 +26,15 @@ public class LdapController {
     @RequestMapping(path = "/portal", method = RequestMethod.POST)
     public String search(@RequestParam(value = "action", required = false) String action,
             @RequestParam(value = "newGroupName", required = false) String newGroupName,
+            @RequestParam(value = "newPassword", required = false) String newPassword,
             @RequestParam(value = "newDescription", required = false) String newDescription, Model model) {
         if (action.equals("search")) {
             model.addAttribute("groups", ldapService.search());
         } else if (action.equals("addGroup")) {
-            ldapService.createGroup(newGroupName, newDescription);
+            ldapService.createGroup(newGroupName, newDescription, true, null);
+            // model.addAttribute("groups", ldapService.search());
+        } else if (action.equals("addUser")) {
+            ldapService.createGroup(newGroupName, newDescription, false, newPassword);
             // model.addAttribute("groups", ldapService.search());
         } else if (action.startsWith("delete")) {
             ldapService.deleteGroup(action.replace("delete", ""));
