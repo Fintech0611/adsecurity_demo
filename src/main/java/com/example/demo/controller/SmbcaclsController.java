@@ -46,6 +46,10 @@ public class SmbcaclsController {
             @RequestParam(value = "userAccount", required = true) String userAccount, Model model) {
 
         if (action.equals("query")) {
+            aclCheck.check1=false;
+            aclCheck.check2=false;
+            aclCheck.check3=false;
+            aclCheck.check4=false;
             daclService.query(aclCheck, userAccount);
             model.addAttribute("check1", aclCheck.check1)
                     .addAttribute("check2", aclCheck.check2)
