@@ -40,7 +40,7 @@ public class DaclService {
                     int startIndex = line.lastIndexOf("/");
                     String accesMask = line.substring(startIndex + 3);
                     Long acl = Long.parseLong(accesMask, 16);
-                    acl = acl - 0x100000L;
+                    acl = acl - aclBase;
 
                     if ((aclCheck.checkValue1.equals(acl & aclCheck.checkValue1))) {
                         aclCheck.check1 = true;
