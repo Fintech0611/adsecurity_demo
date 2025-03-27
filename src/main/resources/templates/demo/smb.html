@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title th:text="${title}">windows フォルダのセキュリティ詳細設定デモ</title>
+    <style>
+        .bordered-table {
+            border-collapse: collapse;
+            /* 合并边框 */
+        }
+
+        .bordered-table,
+        .bordered-table th,
+        .bordered-table td {
+            border: 1px solid black;
+            /* 添加边框 */
+        }
+    </style>
+</head>
+
+<body style="font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;font-size: 12px;">
+    <form th:action="@{/smb/portal}" method="post">
+        <div>
+            <div style="display:block;float:left;width: 500;">
+                <table class="bordered-table">
+                    <colgroup>
+                        <col style="width:320px;" />
+                        <col style="width:180px;" />
+                    </colgroup>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <input type="text" id="folderName" name="folderName" th:value="${folderName}" />
+                            </td>
+                            <td style="text-align: center;">
+                                <button type="submit" id="action" name="action" value="list">リスト</button>
+                                <button type="submit" id="action" name="action" value="create">追加</button>
+                                <button type="submit" id="action" name="action" value="delete">削除</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div style="display:block;float:left;width: 500;">
+
+                <table class="bordered-table">
+                    <colgroup>
+                        <col style="width:320px;" />
+                        <col style="width:180px;" />
+                    </colgroup>
+                    <tbody>
+                        <tr th:each="file : ${fileList}">
+                            <td>
+                                <span th:text="${file.get('name')}"></span>
+                            </td>
+                            <td style="text-align: center;">
+                                <span th:text="${file.get('type')}"></span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </form>
+</body>
