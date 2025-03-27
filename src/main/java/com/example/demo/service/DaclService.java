@@ -17,7 +17,7 @@ public class DaclService {
     private final String password = "Qin711019";
 
     public void query(AclCheck aclCheck, String userAccount) {
-        Long acl;
+        Long aclBase = 0x100000L;
 
         try {
             // 构建 smbcacls 命令
@@ -38,9 +38,9 @@ public class DaclService {
                     System.out.println(line);
 
                     int startIndex = line.lastIndexOf("/");
-                    String accesMask = line.substring(startIndex + 1);
-                    acl = Long.parseLong(accesMask);
-                    acl = acl-0x100000L;
+                    String accesMask = line.substring(startIndex + 3);
+                    Long acl = Long.parseLong(accesMask, 16);
+                    acl = acl - 0x100000L;
 
                     if ((aclCheck.checkValue1.equals(acl & aclCheck.checkValue1))) {
                         aclCheck.check1 = true;
