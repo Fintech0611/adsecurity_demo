@@ -22,7 +22,7 @@ public class DaclService {
         try {
             // 构建 smbcacls 命令
             String command = String.format(
-                    "smbcacls %s \"%s\" -U %s%%%s | grep \"ACL:%s\"",
+                    "smbcacls %s \"%s\" -U %s%%%s | grep -F \"ACL:%s\"",
                     sharePath, folder, user, password, userAccount);
 
             System.out.println("command : " + command);
